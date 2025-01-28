@@ -59,6 +59,10 @@
             right: 20px;
             z-index: 1000;
         }
+        #userAnswer:disabled {
+            background-color: var(--background-color);
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body class="py-4">
@@ -102,8 +106,8 @@
                     <h2 id="questionText" class="text-center mb-4 display-1"></h2>
                     <div class="input-group mb-3">
                         <input type="number" class="form-control form-control-lg" id="userAnswer" 
-                               placeholder="Masukkan jawaban..." step="1">
-                        <button class="btn btn-success" type="button" onclick="submitAnswer()">Jawab</button>
+                               placeholder="Masukkan jawaban..." step="1" autocomplete="off">
+                        <button class="btn btn-success" type="button" onclick="submitAnswer()" id="submitBtn">Jawab</button>
                     </div>
                 </div>
                 <button class="btn btn-warning" onclick="finishQuiz()">Selesai Kuis</button>
@@ -144,7 +148,7 @@
         }
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-        // Quiz Logic
+        // Quiz Configuration
         const config = {
             difficultySettings: {
                 easy: {
@@ -173,7 +177,9 @@
             timePerQuestion: 30
         };
 
+        // Quiz State
         let state = {
+            isQuizActive: false,
             currentQuestion: null,
             timer: null,
             timeLeft: config.timePerQuestion,
@@ -183,11 +189,13 @@
             currentDifficulty: 'easy'
         };
 
+        // Question Generator
         function generateQuestion() {
             const operation = state.currentOperation;
             const settings = config.difficultySettings[state.currentDifficulty][operation];
+            
             let a, b, question, answer;
-
+            
             switch(operation) {
                 case '+':
                     a = randomInt(...settings.a);
@@ -199,7 +207,7 @@
                 case '-':
                     a = randomInt(...settings.a);
                     b = randomInt(...settings.b);
-                    while(b >= a) b = randomInt(...settings.b); // Pastikan a > b
+                    while(b >= a) b = randomInt(...settings.b);
                     answer = a - b;
                     question = `${a} - ${b}`;
                     break;
@@ -226,7 +234,7 @@
                     question = `${a}^${b}`;
                     break;
             }
-
+            
             return { question, answer };
         }
 
@@ -234,7 +242,9 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        // Quiz Control Functions
         function startNewQuiz() {
+            state.isQuizActive = true;
             state.currentOperation = document.getElementById('operation').value;
             state.currentDifficulty = document.getElementById('difficulty').value;
             state.questions = [];
@@ -244,19 +254,23 @@
             document.getElementById('quizSection').style.display = 'block';
             document.getElementById('resultsSection').style.display = 'none';
             
+            enableInput();
             nextQuestion();
         }
 
         function nextQuestion() {
-            if(state.questions.length >= config.maxQuestions) {
+            if(!state.isQuizActive || state.questions.length >= config.maxQuestions) {
                 finishQuiz();
                 return;
             }
 
             state.currentQuestion = generateQuestion();
             state.questions.push(state.currentQuestion);
+            
             document.getElementById('questionText').textContent = state.currentQuestion.question;
             document.getElementById('userAnswer').value = '';
+            document.getElementById('userAnswer').focus();
+            
             startTimer();
         }
 
@@ -266,6 +280,8 @@
             document.getElementById('timeLeft').textContent = state.timeLeft;
 
             state.timer = setInterval(() => {
+                if(!state.isQuizActive) return;
+                
                 state.timeLeft--;
                 document.getElementById('timeLeft').textContent = state.timeLeft;
 
@@ -276,19 +292,10 @@
         }
 
         function handleTimeout() {
-            clearInterval(state.timer);
+            if(!state.isQuizActive) return;
+            
             state.userAnswers.push(null);
-            if(state.questions.length < config.maxQuestions) {
-                nextQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        function submitAnswer() {
-            clearInterval(state.timer);
-            const answer = parseInt(document.getElementById('userAnswer').value);
-            state.userAnswers.push(isNaN(answer) ? null : answer);
+            document.getElementById('userAnswer').value = '';
             
             if(state.questions.length < config.maxQuestions) {
                 nextQuestion();
@@ -297,9 +304,44 @@
             }
         }
 
-        function finishQuiz() {
+        function submitAnswer() {
+            if(!state.isQuizActive) return;
+            
+            const input = document.getElementById('userAnswer');
+            const answer = parseInt(input.value);
+            
+            disableInput();
             clearInterval(state.timer);
+            
+            state.userAnswers.push(isNaN(answer) ? null : answer);
+            
+            setTimeout(() => {
+                if(state.questions.length < config.maxQuestions) {
+                    enableInput();
+                    nextQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 100);
+        }
+
+        function finishQuiz() {
+            state.isQuizActive = false;
+            clearInterval(state.timer);
+            disableInput();
             showResults();
+        }
+
+        // UI Helpers
+        function disableInput() {
+            document.getElementById('userAnswer').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+        }
+
+        function enableInput() {
+            document.getElementById('userAnswer').disabled = false;
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('userAnswer').focus();
         }
 
         function showResults() {
@@ -325,10 +367,18 @@
             });
         }
 
-        // Enter key handler
+        // Event Listeners
         document.getElementById('userAnswer').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') submitAnswer();
+            if(e.key === 'Enter') {
+                e.preventDefault();
+                if(state.isQuizActive) submitAnswer();
+            }
         });
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     </script>
 </body>
 </html>
