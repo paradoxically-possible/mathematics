@@ -64,4 +64,4 @@ Sebuah aplikasi kuis matematika berbasis web dengan fitur tema gelap/terang, tin
 
 1. Clone repositori atau download file ZIP
    ```bash
-   [git clone https://github.com/paradoxically-possible/mathematics.git]
+   git clone https://github.com/paradoxically-possible/mathematics.git
