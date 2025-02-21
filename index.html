@@ -1,384 +1,466 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="id" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Matematika</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --background-color: #f8f9fa;
-            --text-color: #212529;
-            --card-background: #ffffff;
-            --primary-color: #007bff;
-            --timer-color: #dc3545;
-            --correct-bg: #d4edda;
-            --wrong-bg: #f8d7da;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-        }
-
-        [data-bs-theme="dark"] {
-            --background-color: #121212;
-            --text-color: #ffffff;
-            --card-background: #1e1e1e;
-            --primary-color: #0d6efd;
-            --timer-color: #ff6b6b;
-            --correct-bg: #2d4a35;
-            --wrong-bg: #4a2d2d;
-            --shadow-color: rgba(255, 255, 255, 0.1);
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            min-height: 100vh;
-        }
-        .quiz-container {
-            background: var(--card-background);
-            border-radius: 15px;
-            box-shadow: 0 0 20px var(--shadow-color);
-        }
-        .question-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary-color);
-        }
-        .timer {
-            font-size: 1.5rem;
-            color: var(--timer-color);
-            font-weight: bold;
-        }
-        .correct-answer {
-            background-color: var(--correct-bg) !important;
-        }
-        .wrong-answer {
-            background-color: var(--wrong-bg) !important;
-        }
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        #userAnswer:disabled {
-            background-color: var(--background-color);
-            opacity: 0.8;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis Matematika</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Variabel untuk tema terang */
+    :root {
+      --background-color: #f8f9fa;
+      --text-color: #212529;
+      --card-background: #ffffff;
+      --primary-color: #007bff;
+      --timer-color: #dc3545;
+      --correct-bg: #d4edda;
+      --wrong-bg: #f8d7da;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    /* Variabel untuk tema gelap */
+    [data-bs-theme="dark"] {
+      --background-color: #121212;
+      --text-color: #ffffff;
+      --card-background: #1e1e1e;
+      --primary-color: #0d6efd;
+      --timer-color: #ff6b6b;
+      --correct-bg: #2d4a35;
+      --wrong-bg: #4a2d2d;
+      --shadow-color: rgba(255, 255, 255, 0.1);
+    }
+    /* Gaya global */
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      min-height: 100vh;
+    }
+    .quiz-container {
+      background: var(--card-background);
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--shadow-color);
+    }
+    .question-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary-color);
+    }
+    .timer {
+      font-size: 1.5rem;
+      color: var(--timer-color);
+      font-weight: bold;
+    }
+    .correct-answer {
+      background-color: var(--correct-bg) !important;
+    }
+    .wrong-answer {
+      background-color: var(--wrong-bg) !important;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    #userAnswer:disabled {
+      background-color: var(--background-color);
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body class="py-4">
-    <div class="theme-toggle">
-        <button class="btn btn-secondary" id="themeToggle">🌙</button>
-    </div>
+  <!-- Tombol Ganti Tema -->
+  <div class="theme-toggle">
+    <button class="btn btn-secondary" id="themeToggle">🌙</button>
+  </div>
 
-    <div class="container">
-        <!-- Mode Selection -->
-        <div id="modeSelection" class="text-center mb-5">
-            <h1 class="display-4 mb-4">Kuis Matematika</h1>
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-4 mb-3">
-                    <select class="form-select form-select-lg" id="difficulty">
-                        <option value="easy">Mudah</option>
-                        <option value="medium">Sedang</option>
-                        <option value="hard">Susah</option>
-                    </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <select class="form-select form-select-lg" id="operation">
-                        <option value="+">Pertambahan</option>
-                        <option value="-">Pengurangan</option>
-                        <option value="×">Perkalian</option>
-                        <option value="÷">Pembagian</option>
-                        <option value="^">Pangkat</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-lg btn-primary" onclick="startNewQuiz()">Mulai Kuis</button>
+  <div class="container">
+    <!-- Mode Selection -->
+    <section id="modeSelection" class="text-center mb-5">
+      <h1 class="display-4 mb-4">Kuis Matematika</h1>
+      <div class="row justify-content-center mb-4">
+        <!-- Pilihan Mode -->
+        <div class="col-md-3 mb-3">
+          <select class="form-select form-select-lg" id="mode">
+            <option value="persiapan">Persiapan</option>
+            <option value="1/2 penuh">1/2 Penuh</option>
+            <option value="penuh">Penuh</option>
+          </select>
         </div>
-
-        <!-- Quiz Section -->
-        <div id="quizSection" style="display: none">
-            <div class="quiz-container p-4 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="mb-0">Soal</h3>
-                    <div class="timer">Waktu: <span id="timeLeft">30</span>s</div>
-                </div>
-                <div class="question-card p-4 mb-4">
-                    <h2 id="questionText" class="text-center mb-4 display-1"></h2>
-                    <div class="input-group mb-3">
-                        <input type="number" class="form-control form-control-lg" id="userAnswer" 
-                               placeholder="Masukkan jawaban..." step="1" autocomplete="off">
-                        <button class="btn btn-success" type="button" onclick="submitAnswer()" id="submitBtn">Jawab</button>
-                    </div>
-                </div>
-                <button class="btn btn-warning" onclick="finishQuiz()">Selesai Kuis</button>
-            </div>
+        <!-- Pilihan Tingkat Kesulitan -->
+        <div class="col-md-3 mb-3">
+          <select class="form-select form-select-lg" id="difficulty">
+            <option value="easy">Mudah</option>
+            <option value="medium">Sedang</option>
+            <option value="hard">Susah</option>
+          </select>
         </div>
-
-        <!-- Results Section -->
-        <div id="resultsSection" style="display: none">
-            <div class="quiz-container p-4">
-                <h2 class="mb-4">Hasil Kuis</h2>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Soal</th>
-                                <th>Jawaban Benar</th>
-                                <th>Jawaban Anda</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultsBody"></tbody>
-                    </table>
-                </div>
-                <button class="btn btn-primary mt-3" onclick="location.reload()">Kuis Baru</button>
-            </div>
+        <!-- Pilihan Operasi Hitung -->
+        <div class="col-md-3 mb-3">
+          <select class="form-select form-select-lg" id="operation">
+            <option value="+">Pertambahan</option>
+            <option value="-">Pengurangan</option>
+            <option value="×">Perkalian</option>
+            <option value="÷">Pembagian</option>
+            <option value="^">Pangkat</option>
+          </select>
         </div>
-    </div>
+      </div>
+      <button class="btn btn-lg btn-primary" onclick="startNewQuiz()">Mulai Kuis</button>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Theme Toggle
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-bs-theme') === 'dark';
-            html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-            document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+    <!-- Quiz Section -->
+    <section id="quizSection" style="display: none">
+      <div class="quiz-container p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="mb-0">Soal</h3>
+          <div class="timer">Waktu: <span id="timeLeft">30</span>s</div>
+        </div>
+        <div class="question-card p-4 mb-4">
+          <h2 id="questionText" class="text-center mb-4 display-1"></h2>
+          <div class="input-group mb-3">
+            <input type="number" class="form-control form-control-lg" id="userAnswer" 
+                   placeholder="Masukkan jawaban..." step="1" autocomplete="off">
+            <button class="btn btn-success" type="button" onclick="submitAnswer()" id="submitBtn">Jawab</button>
+          </div>
+        </div>
+        <button class="btn btn-warning" onclick="finishQuiz()">Selesai Kuis</button>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="resultsSection" style="display: none">
+      <div class="quiz-container p-4">
+        <h2 class="mb-4">Hasil Kuis</h2>
+        <!-- Ringkasan Hasil Akhir -->
+        <div id="finalStats" class="mb-4"></div>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Soal</th>
+                <th>Jawaban Benar</th>
+                <th>Jawaban Anda</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="location.reload()">Kuis Baru</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /**********************
+     * FUNGSI GANTI TEMA *
+     **********************/
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-bs-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      html.setAttribute('data-bs-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      document.getElementById('themeToggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    /****************************
+     * KONFIGURASI DAN STATE QUIZ *
+     ****************************/
+    const config = {
+      // Penyesuaian rentang angka per level kesulitan:
+      difficultySettings: {
+        easy: {
+          '+': { a: [1, 20], b: [1, 20] },
+          '-': { a: [10, 30], b: [1, 9] },
+          '×': { a: [1, 5], b: [1, 5] },
+          '÷': { divisor: [1, 5], quotient: [1, 5] },
+          '^': { base: [1, 3], exp: [2, 3] }
+        },
+        medium: {
+          '+': { a: [20, 100], b: [20, 100] },
+          '-': { a: [50, 150], b: [20, 50] },
+          '×': { a: [5, 10], b: [5, 10] },
+          '÷': { divisor: [2, 10], quotient: [2, 10] },
+          '^': { base: [2, 4], exp: [2, 3] }
+        },
+        hard: {
+          '+': { a: [100, 500], b: [100, 500] },
+          '-': { a: [200, 600], b: [100, 200] },
+          '×': { a: [10, 20], b: [10, 20] },
+          '÷': { divisor: [5, 20], quotient: [5, 20] },
+          '^': { base: [3, 6], exp: [3, 4] }
         }
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+      },
+      maxQuestions: 100, // nilai default; akan disesuaikan berdasarkan mode
+      timePerQuestion: 30
+    };
 
-        // Quiz Configuration
-        const config = {
-            difficultySettings: {
-                easy: {
-                    '+': { a: [1, 50], b: [1, 50] },
-                    '-': { a: [2, 50], b: [1, 49] },
-                    '×': { a: [1, 10], b: [1, 10] },
-                    '÷': { divisor: [1, 10], quotient: [1, 10] },
-                    '^': { base: [1, 5], exp: [2, 3] }
-                },
-                medium: {
-                    '+': { a: [50, 200], b: [50, 200] },
-                    '-': { a: [100, 500], b: [50, 490] },
-                    '×': { a: [10, 25], b: [5, 15] },
-                    '÷': { divisor: [10, 50], quotient: [5, 20] },
-                    '^': { base: [2, 6], exp: [2, 4] }
-                },
-                hard: {
-                    '+': { a: [500, 1000], b: [500, 1000] },
-                    '-': { a: [1000, 2000], b: [500, 1900] },
-                    '×': { a: [25, 50], b: [15, 30] },
-                    '÷': { divisor: [50, 100], quotient: [10, 25] },
-                    '^': { base: [3, 10], exp: [3, 5] }
-                }
-            },
-            maxQuestions: 10,
-            timePerQuestion: 30
-        };
+    let state = {
+      isQuizActive: false,
+      currentQuestion: null,
+      timer: null,
+      timeLeft: config.timePerQuestion,
+      questions: [],
+      userAnswers: [],
+      currentOperation: '+',
+      currentDifficulty: 'easy',
+      currentMode: 'persiapan', // mode default
+      startTime: null,
+      endTime: null
+    };
 
-        // Quiz State
-        let state = {
-            isQuizActive: false,
-            currentQuestion: null,
-            timer: null,
-            timeLeft: config.timePerQuestion,
-            questions: [],
-            userAnswers: [],
-            currentOperation: '+',
-            currentDifficulty: 'easy'
-        };
+    /****************************
+     * FUNGSI-UTILITAS *
+     ****************************/
+    // Menghasilkan bilangan bulat acak antara min dan max (inklusif)
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
-        // Question Generator
-        function generateQuestion() {
-            const operation = state.currentOperation;
-            const settings = config.difficultySettings[state.currentDifficulty][operation];
-            
-            let a, b, question, answer;
-            
-            switch(operation) {
-                case '+':
-                    a = randomInt(...settings.a);
-                    b = randomInt(...settings.b);
-                    answer = a + b;
-                    question = `${a} + ${b}`;
-                    break;
-                
-                case '-':
-                    a = randomInt(...settings.a);
-                    b = randomInt(...settings.b);
-                    while(b >= a) b = randomInt(...settings.b);
-                    answer = a - b;
-                    question = `${a} - ${b}`;
-                    break;
-                
-                case '×':
-                    a = randomInt(...settings.a);
-                    b = randomInt(...settings.b);
-                    answer = a * b;
-                    question = `${a} × ${b}`;
-                    break;
-                
-                case '÷':
-                    const quotient = randomInt(...settings.quotient);
-                    b = randomInt(...settings.divisor);
-                    a = b * quotient;
-                    question = `${a} ÷ ${b}`;
-                    answer = quotient;
-                    break;
-                
-                case '^':
-                    a = randomInt(...settings.base);
-                    b = randomInt(...settings.exp);
-                    answer = Math.pow(a, b);
-                    question = `${a}^${b}`;
-                    break;
-            }
-            
-            return { question, answer };
+    // Menghasilkan soal sesuai operasi dan tingkat kesulitan
+    function generateQuestion() {
+      const operation = state.currentOperation;
+      const settings = config.difficultySettings[state.currentDifficulty][operation];
+      let a, b, question, answer;
+
+      switch(operation) {
+        case '+':
+          a = randomInt(...settings.a);
+          b = randomInt(...settings.b);
+          answer = a + b;
+          question = `${a} + ${b}`;
+          break;
+        case '-':
+          a = randomInt(...settings.a);
+          b = randomInt(...settings.b);
+          while(b >= a) b = randomInt(...settings.b);
+          answer = a - b;
+          question = `${a} - ${b}`;
+          break;
+        case '×':
+          a = randomInt(...settings.a);
+          b = randomInt(...settings.b);
+          answer = a * b;
+          question = `${a} × ${b}`;
+          break;
+        case '÷':
+          const quotient = randomInt(...settings.quotient);
+          b = randomInt(...settings.divisor);
+          a = b * quotient;
+          question = `${a} ÷ ${b}`;
+          answer = quotient;
+          break;
+        case '^':
+          a = randomInt(...settings.base);
+          b = randomInt(...settings.exp);
+          answer = Math.pow(a, b);
+          question = `${a}^${b}`;
+          break;
+        default:
+          console.error('Operasi tidak dikenal:', operation);
+      }
+      return { question, answer };
+    }
+
+    /****************************
+     * KONTROL QUIZ *
+     ****************************/
+    function startNewQuiz() {
+      state.isQuizActive = true;
+      state.currentMode = document.getElementById('mode').value;
+      state.currentDifficulty = document.getElementById('difficulty').value;
+      state.currentOperation = document.getElementById('operation').value;
+      
+      // Sesuaikan jumlah soal berdasarkan mode (minimal 100 soal sebagai dasar)
+      if(state.currentMode === 'persiapan') {
+        config.maxQuestions = 100;
+      } else if(state.currentMode === '1/2 penuh') {
+        config.maxQuestions = 200;
+      } else if(state.currentMode === 'penuh') {
+        config.maxQuestions = 300;
+      }
+      
+      state.questions = [];
+      state.userAnswers = [];
+      state.startTime = new Date(); // catat waktu mulai
+      
+      document.getElementById('modeSelection').style.display = 'none';
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('resultsSection').style.display = 'none';
+      
+      enableInput();
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (!state.isQuizActive || state.questions.length >= config.maxQuestions) {
+        finishQuiz();
+        return;
+      }
+      state.currentQuestion = generateQuestion();
+      state.questions.push(state.currentQuestion);
+      
+      document.getElementById('questionText').textContent = state.currentQuestion.question;
+      document.getElementById('userAnswer').value = '';
+      document.getElementById('userAnswer').focus();
+      
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(state.timer);
+      state.timeLeft = config.timePerQuestion;
+      document.getElementById('timeLeft').textContent = state.timeLeft;
+
+      state.timer = setInterval(() => {
+        if (!state.isQuizActive) return;
+        state.timeLeft--;
+        document.getElementById('timeLeft').textContent = state.timeLeft;
+
+        if (state.timeLeft <= 0) {
+          handleTimeout();
         }
+      }, 1000);
+    }
 
-        function randomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+    function handleTimeout() {
+      if (!state.isQuizActive) return;
+      state.userAnswers.push(null);
+      document.getElementById('userAnswer').value = '';
+
+      if (state.questions.length < config.maxQuestions) {
+        nextQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function submitAnswer() {
+      if (!state.isQuizActive) return;
+      const input = document.getElementById('userAnswer');
+      const answer = parseInt(input.value);
+      disableInput();
+      clearInterval(state.timer);
+
+      state.userAnswers.push(isNaN(answer) ? null : answer);
+
+      setTimeout(() => {
+        if (state.questions.length < config.maxQuestions) {
+          enableInput();
+          nextQuestion();
+        } else {
+          finishQuiz();
         }
+      }, 100);
+    }
 
-        // Quiz Control Functions
-        function startNewQuiz() {
-            state.isQuizActive = true;
-            state.currentOperation = document.getElementById('operation').value;
-            state.currentDifficulty = document.getElementById('difficulty').value;
-            state.questions = [];
-            state.userAnswers = [];
-            
-            document.getElementById('modeSelection').style.display = 'none';
-            document.getElementById('quizSection').style.display = 'block';
-            document.getElementById('resultsSection').style.display = 'none';
-            
-            enableInput();
-            nextQuestion();
+    function finishQuiz() {
+      state.isQuizActive = false;
+      clearInterval(state.timer);
+      disableInput();
+      state.endTime = new Date(); // catat waktu selesai
+      showResults();
+    }
+
+    /****************************
+     * BANTUAN UI *
+     ****************************/
+    function disableInput() {
+      document.getElementById('userAnswer').disabled = true;
+      document.getElementById('submitBtn').disabled = true;
+    }
+
+    function enableInput() {
+      document.getElementById('userAnswer').disabled = false;
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('userAnswer').focus();
+    }
+
+    function showResults() {
+      document.getElementById('quizSection').style.display = 'none';
+      document.getElementById('resultsSection').style.display = 'block';
+
+      // Hitung total waktu dalam detik dengan 2 angka di belakang koma
+      const totalTime = ((state.endTime - state.startTime) / 1000).toFixed(2);
+      // Hitung jumlah jawaban benar
+      let correctCount = 0;
+      state.questions.forEach((q, index) => {
+        if (state.userAnswers[index] === q.answer) {
+          correctCount++;
         }
+      });
+      const totalQuestions = state.questions.length;
+      const wrongCount = totalQuestions - correctCount;
+      const percentageCorrect = ((correctCount / totalQuestions) * 100).toFixed(2);
+      const avgTimePerOp = (totalTime / totalQuestions).toFixed(2);
+      // Skor = (jawaban benar × 60) / total waktu
+      const score = ((correctCount * 60) / totalTime).toFixed(2);
 
-        function nextQuestion() {
-            if(!state.isQuizActive || state.questions.length >= config.maxQuestions) {
-                finishQuiz();
-                return;
-            }
+      // Tentukan kategori berdasarkan skor
+      let category = "";
+      let categoryColor = "";
+      if (score <= 30) {
+        category = "Gagap Hitung";
+        categoryColor = "#FF6F61"; // warna untuk gagap hitung
+      } else if (score <= 60) {
+        category = "Tuntas";
+        categoryColor = "#42a5f5"; // warna untuk tuntas
+      } else {
+        category = "Istimewa";
+        categoryColor = "#FFD700"; // warna untuk istimewa
+      }
 
-            state.currentQuestion = generateQuestion();
-            state.questions.push(state.currentQuestion);
-            
-            document.getElementById('questionText').textContent = state.currentQuestion.question;
-            document.getElementById('userAnswer').value = '';
-            document.getElementById('userAnswer').focus();
-            
-            startTimer();
-        }
+      // Bangun ringkasan hasil akhir
+      const finalStatsHTML = `
+        <p><strong>Operasi Hitung:</strong> ${state.currentOperation}</p>
+        <p><strong>Mode:</strong> ${state.currentMode}</p>
+        <p><strong>Skor:</strong> ${score} Operations per minute</p>
+        <p><strong>Rata-rata waktu per operasi:</strong> ${avgTimePerOp} detik</p>
+        <p><strong>Status Ketuntasan:</strong> <span style="color: ${categoryColor}; font-weight: bold;">${category}</span></p>
+        <p><strong>Jawaban Benar:</strong> ${correctCount}</p>
+        <p><strong>Jawaban Salah:</strong> ${wrongCount}</p>
+        <p><strong>Persentase Benar:</strong> ${percentageCorrect}%</p>
+        <p><strong>Total Waktu:</strong> ${totalTime} detik</p>
+      `;
+      document.getElementById('finalStats').innerHTML = finalStatsHTML;
 
-        function startTimer() {
-            clearInterval(state.timer);
-            state.timeLeft = config.timePerQuestion;
-            document.getElementById('timeLeft').textContent = state.timeLeft;
+      // Tampilkan detail tiap soal dalam tabel
+      const tbody = document.getElementById('resultsBody');
+      tbody.innerHTML = "";
+      state.questions.forEach((q, index) => {
+        const userAnswer = state.userAnswers[index] !== null ? state.userAnswers[index] : 'Tidak dijawab';
+        const isCorrect = state.userAnswers[index] === q.answer;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${q.question}</td>
+          <td>${q.answer}</td>
+          <td>${userAnswer}</td>
+          <td>${isCorrect ? '✅ Benar' : '❌ Salah'}</td>
+        `;
+        row.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+        tbody.appendChild(row);
+      });
+    }
 
-            state.timer = setInterval(() => {
-                if(!state.isQuizActive) return;
-                
-                state.timeLeft--;
-                document.getElementById('timeLeft').textContent = state.timeLeft;
+    /****************************
+     * EVENT LISTENERS *
+     ****************************/
+    document.getElementById('userAnswer').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && state.isQuizActive) {
+        e.preventDefault();
+        submitAnswer();
+      }
+    });
 
-                if(state.timeLeft <= 0) {
-                    handleTimeout();
-                }
-            }, 1000);
-        }
-
-        function handleTimeout() {
-            if(!state.isQuizActive) return;
-            
-            state.userAnswers.push(null);
-            document.getElementById('userAnswer').value = '';
-            
-            if(state.questions.length < config.maxQuestions) {
-                nextQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        function submitAnswer() {
-            if(!state.isQuizActive) return;
-            
-            const input = document.getElementById('userAnswer');
-            const answer = parseInt(input.value);
-            
-            disableInput();
-            clearInterval(state.timer);
-            
-            state.userAnswers.push(isNaN(answer) ? null : answer);
-            
-            setTimeout(() => {
-                if(state.questions.length < config.maxQuestions) {
-                    enableInput();
-                    nextQuestion();
-                } else {
-                    finishQuiz();
-                }
-            }, 100);
-        }
-
-        function finishQuiz() {
-            state.isQuizActive = false;
-            clearInterval(state.timer);
-            disableInput();
-            showResults();
-        }
-
-        // UI Helpers
-        function disableInput() {
-            document.getElementById('userAnswer').disabled = true;
-            document.getElementById('submitBtn').disabled = true;
-        }
-
-        function enableInput() {
-            document.getElementById('userAnswer').disabled = false;
-            document.getElementById('submitBtn').disabled = false;
-            document.getElementById('userAnswer').focus();
-        }
-
-        function showResults() {
-            document.getElementById('quizSection').style.display = 'none';
-            document.getElementById('resultsSection').style.display = 'block';
-
-            const tbody = document.getElementById('resultsBody');
-            tbody.innerHTML = '';
-
-            state.questions.forEach((q, index) => {
-                const userAnswer = state.userAnswers[index] ?? 'Tidak dijawab';
-                const isCorrect = state.userAnswers[index] === q.answer;
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${q.question}</td>
-                    <td>${q.answer}</td>
-                    <td>${userAnswer}</td>
-                    <td>${isCorrect ? '✅ Benar' : '❌ Salah'}</td>
-                `;
-                row.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
-                tbody.appendChild(row);
-            });
-        }
-
-        // Event Listeners
-        document.getElementById('userAnswer').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                e.preventDefault();
-                if(state.isQuizActive) submitAnswer();
-            }
-        });
-
-        // Initialize theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-bs-theme', savedTheme);
-        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-    </script>
+    // Inisialisasi tema berdasarkan penyimpanan lokal
+    (function initializeTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-bs-theme', savedTheme);
+      document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    })();
+  </script>
 </body>
 </html>
