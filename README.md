@@ -1,67 +1,72 @@
-# Kuis Matematika Interaktif
+# Interactive Math Quiz
 
-Sebuah aplikasi kuis matematika berbasis web dengan fitur tema gelap/terang, tingkat kesulitan, dan berbagai jenis operasi matematika.
+An interactive web-based math quiz application featuring modern design and dynamic user settings. This app comes with dynamic themes, multiple difficulty levels including an adaptive mode, and a comprehensive selection of mathematical operations.
 
-![Demo Aplikasi](screenshots.jpeg) <!-- Tambahkan screenshot jika ada -->
+## Main Features
 
-## Fitur Utama
+🎨 **Dynamic Theme & Modern Design**  
+- Modern design using CSS Variables for dynamic theming  
+- Header with gradient effects and engaging icons
 
-🎨 **Tema Dinamis**  
-- Dukungan tema terang/gelap otomatis  
-- Tombol toggle tema interaktif  
+📊 **Difficulty Levels & Adaptive Mode**  
+- Three levels: Easy, Normal, and Hard  
+- Automatically adjusted number ranges based on the selected difficulty  
+- **Adaptive Quiz**: An adaptive mode that analyzes past performance and adjusts operation selection to help improve your skills
 
-📊 **Tingkat Kesulitan**  
-- 3 level kesulitan: Mudah, Sedang, Susah  
-- Rentang angka yang disesuaikan otomatis  
+🔢 **Mathematical Operations**  
+- Addition (+)  
+- Subtraction (-)  
+- Multiplication (×)  
+- Division (÷) with special validation for quotient & remainder  
+- Exponentiation (^)  
+- **Percentage (%)**
 
-🔢 **Jenis Operasi Matematika**  
-- Pertambahan (+)  
-- Pengurangan (-)  
-- Perkalian (×)  
-- Pembagian (÷)  
-- Pangkat (^)  
+⏱️ **Timer Challenge Mode**  
+- Optional timer mode with adjustable question duration (5–60 seconds, default 30 seconds)  
+- Visual warnings via progress bar color changes as time runs low
 
-⏱️ **Sistem Timer**  
-- Waktu 30 detik per soal  
-- Peringatan visual saat waktu hampir habis  
+✅ **Instant Answer Validation & Feedback**  
+- Real-time answer checking  
+- Visual effects (e.g., shake animation) on invalid inputs  
+- Specific handling for division questions and tolerance for percentage calculations
 
-✅ **Validasi Jawaban**  
-- Pengecekan jawaban instan  
-- Warna berbeda untuk jawaban benar/salah  
+📈 **Interactive Results & Detailed Statistics**  
+- Final results display with score and detailed statistics  
+- Performance charts using Chart.js showing time per question and accuracy  
+- Adaptive feedback based on your performance with celebratory confetti animations for high scores
 
-📈 **Hasil Detail**  
-- Tabel hasil lengkap dengan jawaban benar dan user  
-- Statistik performa  
+📱 **Responsive & User-Friendly Settings**  
+- Mobile-friendly design compatible with various screen sizes  
+- Save user preferences and quiz history using localStorage
 
-📱 **Responsif**  
-- Desain mobile-friendly  
-- Kompatibel dengan berbagai ukuran layar  
+## How to Use
 
-## Cara Menggunakan
+1. **Configure Quiz Settings**  
+   - Select the mathematical operations (including Percentage)  
+   - Set the number ranges for questions and the exponent value  
+   - Choose the number of questions  
+   - Enable *Timer Challenge Mode* if desired, and adjust the time per question  
+   - Click the **Start Quiz** button
 
-1. **Pilih Mode**  
-   - Pilih tingkat kesulitan dari dropdown  
-   - Pilih jenis operasi matematika  
-   - Klik "Mulai Kuis"
+2. **Answer the Questions**  
+   - Enter your answer in the input field (for division, provide both quotient and remainder separately)  
+   - Press Enter or click the **Submit Answer** button  
+   - If the timer mode is active, keep an eye on the progress bar and time warnings
 
-2. **Jawab Pertanyaan**  
-   - Masukkan jawaban di kotak input  
-   - Tekan Enter atau klik tombol "Jawab"  
-   - Setiap soal memiliki waktu 30 detik
+3. **View Results & Try Adaptive Mode**  
+   - Upon completion, view your results including performance charts, statistics (average time, accuracy, fastest answer, etc.), and adaptive feedback  
+   - Click **New Quiz** to try again or **Try Adaptive Quiz** to start a quiz with settings adjusted based on your previous performance
 
-3. **Lihat Hasil**  
-   - Hasil lengkap ditampilkan setelah kuis selesai  
-   - Klik "Kuis Baru" untuk memulai lagi  
+## Technologies Used
 
-## Teknologi yang Digunakan
+- **HTML5** – Modern web page structure  
+- **Vanilla JavaScript** – Core application logic and interactivity  
+- **Custom CSS & CSS Variables** – Responsive design and dynamic theming  
+- **Chart.js** – Visualization of performance charts  
+- **Font Awesome 6** – Supporting icons for enhanced UI
 
-- **Bootstrap 5** - Framework CSS untuk desain responsif  
-- **Vanilla JavaScript** - Logika aplikasi utama  
-- **CSS Variables** - Sistem tema dinamis  
-- **HTML5** - Struktur halaman web  
+## Installation
 
-## Instalasi
-
-1. Clone repositori atau download file ZIP
+1. Clone the repository or download the ZIP file:
    ```bash
    git clone https://github.com/paradoxically-possible/mathematics.git
